@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//============================================================================== upore emonee silo comment soho
+
+
+
+// model demo1{
+//   id Int @id @default(autoincrement()) //integer length 11, primary key, auto-increment
+//   col1 String //length 191
+//   col2 String? //nullable, length 191
+//   col3 String @unique //unique, length 191
+//   col4 String @default("hello") //kono data supply na dile, length 191
+
+//   col5 Int @db.UnsignedInt //only positive value, length 10
+//   col6 Int //positive negative both, length 11
+//   col7 BigInt //length 20
+//   col8 BigInt @db.UnsignedBigInt//only positive value, -----length 20----- 
+//   col9 Int @db.SmallInt //length 6
+//   col10 Int @db.UnsignedSmallInt ////length 5
+//   col11 Int @db.MediumInt //length 9
+//   col12 Int @db.UnsignedMediumInt //length 8
+//   col13 Int @db.TinyInt //langth 4
+//   col14 Int @db.UnsignedTinyInt //length 3
+//   col15 Decimal //decimal(65,30) 65=before decimal max number length 30=after decimal max number length
+//   col16 Float
+  
+//   col17 String @db.VarChar(1000)
+//   col18 String @db.TinyText
+//   col19 String @db.Text
+//   col20 String @db.LongText
+//   col21 String @db.Char(30)
+//   col22 String @db.MediumText
+// }
+
+// model demo2{
+//   id Int @id @default(autoincrement())
+//   col1 DateTime
+//   col2 DateTime @db.Date
+//   col3 DateTime @db.Time()
+//   col4 DateTime @db.Timestamp() //default date-time machine, not manually
+//   col5 Boolean
+// }
+
+// model demo3{
+//   id Int @id @default(autoincrement())
+//   col1 Bytes @db.Blob //binary large object
+//   col2 Bytes @db.LongBlob
+//   col3 Bytes @db.MediumBlob
+//   col4 Bytes @db.TinyBlob
+//   col5 Bytes @db.Binary(100)
+//   col6 Bytes @db.VarBinary(100)
+
+//   col7 UserType
+// }
+
+// //dropdown
+// enum UserType{
+//   Admin
+//   Staff
+// }
+
+
+
+//===================================================================================================
+
+
+
+model users{
+  id Int @id @default(autoincrement())
+
+  firstName String @db.VarChar(50)
+  lastName String @db.VarChar(50)
+  email String @db.VarChar(50) @unique
+  mobile String @db.VarChar(50)
+  password String @db.VarChar(50)
+  otp String @db.VarChar(50) @default("0")
+
+  customers customers[] //[] one to many, ? one to one 
+  categories categories[]
+
+  products products[]
+  invoices invoices[]
+  invoice_products invoice_products[]
+
+  created_at DateTime @db.Timestamp(0) @default(now()) //0 for accuracy
+  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model customers{
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(50)
+  email String @db.VarChar(50)
+  mobile String @db.VarChar(50)
+
+  user_id Int   //foreign key, BigInt hobe na user_id ar *users table ar *id aki datatype hote hobe
+  users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade) //onDelete:Restrict => users, customers thakle users delete kora jabe na, onUpdate:Cascade, users jodi update hoy tar sathe customers ar ralational data gulo update hobe
+
+  invoices invoices[]
+
+  created_at DateTime @db.Timestamp(0) @default(now())
+  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model categories{
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(50)
+
+  user_id Int
+
+  users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  products products[]
+
+  created_at DateTime @db.Timestamp(0) @default(now())
+  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model products{
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(50)
+  price String @db.VarChar(50)
+  unit String @db.VarChar(50)
+  img_url String @db.VarChar(50)
+
+  invoice_products invoice_products?
+
+  user_id Int
+  users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  category_id Int
+  categories categories @relation(fields:[category_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  created_at DateTime @db.Timestamp(0) @default(now())
+  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model invoices{
+  id Int @id @default(autoincrement())
+
+  total String @db.VarChar(50)
+  discount String @db.VarChar(50)
+  vat String @db.VarChar(50)
+  payable String @db.VarChar(50)
+
+  user_id Int
+  users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  customer_id Int
+  customers customers @relation(fields:[customer_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  invoice_products invoice_products[]
+
+  created_at DateTime @db.Timestamp(0) @default(now())
+  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model invoice_products{
+  id Int @id @default(autoincrement())
+
+  qty String @db.VarChar(50)
+  sale_price String @db.VarChar(50)
+
+  user_id Int
+  users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  product_id Int @unique //@unique as one to one relationship
+  products products @relation(fields:[product_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  invoice_id Int
+  invoices invoices @relation(fields:[invoice_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
+
+  created_at DateTime @db.Timestamp(0) @default(now())
+  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt
+}
