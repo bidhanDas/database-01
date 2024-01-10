@@ -57,7 +57,7 @@ export async function POST(req,res){
 
 
 //Delete
-export async function DELETE(req,res){
+export async function DELETE(req,res){ //deleteMany
     try{
         const x = new PrismaClient(); //instance
         const y = await req.json();
