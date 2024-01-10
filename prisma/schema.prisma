@@ -93,7 +93,7 @@ model users{
   invoice_products invoice_products[]
 
   created_at DateTime @db.Timestamp(0) @default(now()) //0 for accuracy
-  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt
+  updated_at DateTime @db.Timestamp(0) @default(now()) @updatedAt //@updatedAt, user jkn data update krbe tkn auto change/update hbe
 }
 
 model customers{
