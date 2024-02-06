@@ -107,7 +107,7 @@ model customers{
   mobile String @db.VarChar(50)
 
   user_id Int   //foreign key, BigInt hobe na user_id ar *users table ar *id aki datatype hote hobe
-  users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade) //onDelete:Restrict => users, customers thakle users delete kora jabe na, onUpdate:Cascade, users jodi update hoy tar sathe customers ar ralational data gulo update hobe
+  users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade) //onDelete:Restrict => customers thakle users delete kora jabe na, onUpdate:Cascade, users jodi update hoy tar sathe customers ar ralational data gulo update hobe
 
   invoices invoices[]
 
@@ -121,7 +121,6 @@ model categories{
   name String @db.VarChar(50)
 
   user_id Int
-
   users users @relation(fields:[user_id],references:[id],onDelete:Restrict,onUpdate:Cascade)
 
   products products[]

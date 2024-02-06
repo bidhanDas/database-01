@@ -366,7 +366,7 @@ const result = await prisma.Employee.findMany({
 });
     
 const result = await prisma.Employee.findMany({
-    where:{salary:{in:[75000,60000]}} //a specified array of values
+    where:{salary:{in:[75000,60000]}} //a specified array of values, () bad diye, [] soho
 });
     
 const result = await prisma.Employee.findMany({
