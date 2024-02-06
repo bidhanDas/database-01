@@ -23,14 +23,17 @@ datasource db {
 
 //   col5 Int @db.UnsignedInt //only positive value, length 10
 //   col6 Int //positive negative both, length 11
+
 //   col7 BigInt //length 20
 //   col8 BigInt @db.UnsignedBigInt//only positive value, -----length 20----- 
+
 //   col9 Int @db.SmallInt //length 6
 //   col10 Int @db.UnsignedSmallInt ////length 5
 //   col11 Int @db.MediumInt //length 9
 //   col12 Int @db.UnsignedMediumInt //length 8
 //   col13 Int @db.TinyInt //langth 4
 //   col14 Int @db.UnsignedTinyInt //length 3
+
 //   col15 Decimal //decimal(65,30) 65=before decimal max number length 30=after decimal max number length
 //   col16 Float
   
